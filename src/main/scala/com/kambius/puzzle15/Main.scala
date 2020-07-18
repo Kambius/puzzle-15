@@ -1,9 +1,11 @@
 package com.kambius.puzzle15
 
-import cats.effect.{ExitCode, IO, IOApp}
 import com.kambius.puzzle15.controller.CliController
 import com.kambius.puzzle15.core.SeqBoard
 import com.kambius.puzzle15.view.CliView
+
+import cats.effect.{ExitCode, IO, IOApp}
+
 import pureconfig._
 import pureconfig.generic.semiauto._
 
@@ -11,7 +13,7 @@ object Main extends IOApp {
   override def run(args: List[String]): IO[ExitCode] =
     for {
       config     <- IO(ConfigSource.default.loadOrThrow[Config])
-      controller <- IO(new CliController(new CliView))
+      controller <- IO(new CliController[IO](new CliView))
       board <- IO {
         SeqBoard
           .create(config.rows, config.cols)

@@ -1,14 +1,15 @@
 package com.kambius.puzzle15.view
 
-import cats.effect.IO
-import cats.syntax.option._
-import com.kambius.puzzle15.controller.{Exit, GameEvent, GeneralError, MoveError, Moved, Shuffled, Solved, Started}
+import com.kambius.puzzle15.controller._
 import com.kambius.puzzle15.core.{Board, Direction}
+
+import cats.effect.Sync
+import cats.syntax.option._
 
 /**
   * Simple terminal view implementation that is expected to be controlled via CLI commands.
   */
-class CliView extends View {
+class CliView[F[_]](implicit F: Sync[F]) extends View[F] {
   def boardToStr(board: Board): String = {
     val numSize = board.maxNumber.toString.length
     def tileToStr(row: Int, col: Int) =
@@ -35,8 +36,8 @@ class CliView extends View {
       case Direction.Right => "RIGHT"
     }
 
-  private[view] def showBoardScreen(board: Board, header: String, footer: Option[String] = None): IO[Unit] =
-    IO {
+  private[view] def showBoardScreen(board: Board, header: String, footer: Option[String] = None): F[Unit] =
+    F.delay {
       print(
         s"""${CliView.CleanScreenStr}$header
          /
@@ -45,7 +46,7 @@ class CliView extends View {
       )
     }
 
-  override def show(event: GameEvent): IO[Unit] =
+  override def show(event: GameEvent): F[Unit] =
     event match {
       case Started(board) =>
         showBoardScreen(

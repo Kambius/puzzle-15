@@ -1,19 +1,21 @@
 package com.kambius.puzzle15.controller
 
-import cats.effect.IO
 import com.kambius.puzzle15.controller.CliController.DirectionKeys
 import com.kambius.puzzle15.core.{Board, Direction}
 import com.kambius.puzzle15.view.View
 
 import scala.io.StdIn.readLine
 
+import cats.effect.Sync
+import cats.syntax.functor._
+
 /**
   * Simple controller implementation that reads user input from terminal.
   * @param view view that displays game events
   */
-class CliController(view: View) extends Controller(view) {
-  override protected def handleInput(board: Board): IO[(Board, Seq[GameEvent])] =
-    IO(readLine().toLowerCase).map(handleKey(_, board))
+class CliController[F[_]](view: View[F])(implicit F: Sync[F]) extends Controller[F](view) {
+  override protected def handleInput(board: Board): F[(Board, Seq[GameEvent])] =
+    F.delay(readLine().toLowerCase).map(handleKey(_, board))
 
   def handleKey(key: String, board: Board): (Board, Seq[GameEvent]) =
     key match {

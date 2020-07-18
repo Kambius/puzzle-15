@@ -1,8 +1,11 @@
 package com.kambiud.puzzle15.controller
 
-import com.kambiud.puzzle15.view.ViewStub
 import com.kambius.puzzle15.controller.{CliController, Exit, GeneralError, MoveError, Moved, Shuffled, Solved}
 import com.kambius.puzzle15.core.{Direction, SeqBoard}
+
+import cats.effect.IO
+
+import com.kambiud.puzzle15.view.ViewStub
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
@@ -12,7 +15,7 @@ class CliControllerSpec extends AnyFlatSpec with Matchers {
   private val sndBoard =
     SeqBoard.create(3, 3).flatMap(_.move(Direction.Down)).flatMap(_.move(Direction.Right)).toOption.get
   private val controller =
-    new CliController(ViewStub)
+    new CliController(ViewStub[IO])
 
   "A CliController" should "handle exit key" in {
     controller.handleKey("q", fstBoard) shouldBe ((fstBoard, Seq(Exit(fstBoard))))

@@ -1,9 +1,14 @@
 package com.kambiud.puzzle15.view
 
-import cats.effect.IO
 import com.kambius.puzzle15.controller.GameEvent
 import com.kambius.puzzle15.view.View
 
-object ViewStub extends View {
-  override def show(event: GameEvent): IO[Unit] = IO.unit
+import cats.Applicative
+
+class ViewStub[F[_]](implicit F: Applicative[F]) extends View[F] {
+  override def show(event: GameEvent): F[Unit] = F.unit
+}
+
+object ViewStub {
+  def apply[F[_]: Applicative] = new ViewStub[F]
 }
