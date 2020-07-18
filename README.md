@@ -1,5 +1,5 @@
 # puzzle-15
-[![Build Status](https://travis-ci.org/Kambius/puzzle-15.svg?branch=master)](https://travis-ci.org/Kambius/puzzle-15)
+[![Build Status](https://travis-ci.com/Kambius/puzzle-15.svg?branch=master)](https://travis-ci.com/Kambius/puzzle-15)
 
 Simple [15 Puzzle](https://en.wikipedia.org/wiki/15_puzzle) implementation written in Scala.
 
