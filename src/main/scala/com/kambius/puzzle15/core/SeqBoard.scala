@@ -1,7 +1,7 @@
 package com.kambius.puzzle15.core
 
-import cats.syntax.option._
 import cats.syntax.either._
+import cats.syntax.option._
 
 /**
   * Board implementation which stores tiles in one-dimensional sequence row by row.

@@ -1,12 +1,14 @@
 package com.kambiud.puzzle15.core
 
 import com.kambius.puzzle15.core.{Direction, SeqBoard}
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should.Matchers
-import cats.syntax.option._
-import cats.syntax.either._
 
 import scala.util.Random
+
+import cats.syntax.either._
+import cats.syntax.option._
+
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
 class SeqBoardSpec extends AnyFlatSpec with Matchers {
   "A SeqBoard" should "be created in solved state" in {

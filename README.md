@@ -9,14 +9,27 @@ Simple [15 Puzzle](https://en.wikipedia.org/wiki/15_puzzle) implementation writt
 * `R` key to reshuffle the board 
 
 ### Commands
-To run the game in SBT:
-`sbt run`
+To run the game in SBT: 
+```
+sbt run
+```
 
 To run tests:
-`sbt test`
+```
+sbt test
+```
 
 To run full source check including code formatting check:
-`sbt validate`
+```
+sbt validate
+```
+
+To format sources:
+```
+sbt fmt
+```
 
 To build binaries:
-`sbt universal:packageBin`
+```
+sbt universal:packageBin
+```

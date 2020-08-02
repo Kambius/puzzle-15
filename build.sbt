@@ -1,6 +1,7 @@
 ThisBuild / useSuperShell := false
 
-addCommandAlias("validate", ";scalafmtSbtCheck;scalafmtCheckAll;test")
+addCommandAlias("validate", "scalafmtSbtCheck;scalafmtCheckAll;scalafixAll --check;test")
+addCommandAlias("fmt", "scalafmtSbt;scalafmtAll;scalafixAll")
 
 lazy val root = (project in file("."))
   .settings(
@@ -16,7 +17,8 @@ lazy val root = (project in file("."))
       "org.scalatest"         %% "scalatest"   % "3.2.0" % Test
     ),
     addCompilerPlugin("org.typelevel" %% "kind-projector"     % "0.10.3"),
-    addCompilerPlugin("com.olegpy"    %% "better-monadic-for" % "0.3.1")
+    addCompilerPlugin("com.olegpy"    %% "better-monadic-for" % "0.3.1"),
+    addCompilerPlugin(scalafixSemanticdb)
   )
 
 scalacOptions ++= Seq(
@@ -37,3 +39,5 @@ scalacOptions ++= Seq(
 )
 
 enablePlugins(JavaAppPackaging)
+
+ThisBuild / scalafixDependencies += "com.nequissimus" %% "sort-imports" % "0.5.4"

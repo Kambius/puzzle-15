@@ -1,19 +1,22 @@
 package com.kambius.puzzle15.controller
 
-import cats.effect.IO
 import com.kambius.puzzle15.core.{Board, Direction}
 import com.kambius.puzzle15.view.View
+
+import cats.Monad
 import cats.instances.vector._
+import cats.syntax.apply._
+import cats.syntax.flatMap._
 import cats.syntax.foldable._
 
 /**
   * Abstract base controller for the game that is used to handle user input and propagate game events to view.
   * @param view view that displays game events
   */
-abstract class Controller(view: View) {
-  protected def handleInput(board: Board): IO[(Board, Seq[GameEvent])]
+abstract class Controller[F[_]](view: View[F])(implicit F: Monad[F]) {
+  protected def handleInput(board: Board): F[(Board, Seq[GameEvent])]
 
-  def start(initialBoard: Board): IO[Unit] =
+  def start(initialBoard: Board): F[Unit] =
     view.show(Started(initialBoard)) *> gameLoop(initialBoard)
 
   protected def exit(board: Board): (Board, Seq[GameEvent]) =
@@ -36,10 +39,10 @@ abstract class Controller(view: View) {
   protected def generalError(board: Board, message: String): (Board, Seq[GameEvent]) =
     (board, Seq(GeneralError(board, message)))
 
-  protected def gameLoop(board: Board): IO[Unit] =
+  protected def gameLoop(board: Board): F[Unit] =
     handleInput(board).flatMap {
       case (nextBoard, events) =>
-        val nextIteration = if (!events.exists(_.isInstanceOf[Exit])) gameLoop(nextBoard) else IO.unit
+        val nextIteration = if (!events.exists(_.isInstanceOf[Exit])) gameLoop(nextBoard) else F.unit
         events.toVector.traverse_(view.show) *> nextIteration
     }
 }
